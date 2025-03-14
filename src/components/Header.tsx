@@ -1,5 +1,7 @@
 'use client'
-import { SignedIn, SignedOut, SignInButton, SignOutButton, useUser } from "@clerk/nextjs"
+import { SignedIn, SignedOut, SignInButton, SignOutButton, UserButton, useUser } from "@clerk/nextjs"
+import Link from "next/link"
+import BreadCrumbs from "./BreadCrumbs"
 
 function Header() {
     const { user } = useUser()
@@ -7,12 +9,12 @@ function Header() {
   return (
     <nav className="flex justify-between items-center p-4">
         {
-          user && <h1 className="text-2xl"> {user.firstName} 's Notes</h1>
+          user && <Link href={'/'} className="text-2xl">{user.firstName}'s Notes</Link>
         }
-        {/* Breacrumbs */}
+        <BreadCrumbs/>
         <div>
           <SignedIn>
-            <SignOutButton/>
+            <UserButton/>
           </SignedIn>
           <SignedOut>
             <SignInButton/>
