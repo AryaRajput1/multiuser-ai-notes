@@ -9,13 +9,9 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { DialogClose } from "@radix-ui/react-dialog"
-import { deleteDoc, doc } from "firebase/firestore"
 import { usePathname, useRouter } from "next/navigation"
 import { useState, useTransition } from "react"
-import { db } from "../../firebase"
 import { deleteDocument } from "@/actions"
 import { toast } from "sonner"
 

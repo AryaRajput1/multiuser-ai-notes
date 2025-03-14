@@ -29,7 +29,7 @@ function Sidebar() {
     })
     const { user } = useUser()
 
-    const [data, loading, error] = useCollection(user && query(collectionGroup(db, "rooms"), where("userId", "==", user.emailAddresses[0].toString())))
+    const [data] = useCollection(user && query(collectionGroup(db, "rooms"), where("userId", "==", user.emailAddresses[0].toString())))
 
     useEffect(() => {
         if (!data) return

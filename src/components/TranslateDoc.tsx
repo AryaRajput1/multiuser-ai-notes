@@ -5,7 +5,6 @@ import {
     DialogClose,
     DialogContent,
     DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
@@ -19,11 +18,7 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import * as Y from "yjs";
-import { Input } from "@/components/ui/input"
-import { usePathname, useRouter } from "next/navigation"
 import { FormEvent, useState, useTransition } from "react"
-import { db } from "../../firebase"
-import { inviteUser } from "@/actions"
 import { toast } from "sonner"
 import { BotIcon, LanguagesIcon } from "lucide-react"
 
@@ -109,7 +104,7 @@ function TranslateDoc({doc}: { doc: Y.Doc}) {
                         <SelectContent>
                             {
                                 languages.map(lang => (
-                                    <SelectItem value={lang}>{lang.toUpperCase()}</SelectItem>
+                                    <SelectItem key={lang} value={lang}>{lang.toUpperCase()}</SelectItem>
                                 ))
                             }
                         </SelectContent>

@@ -10,4 +10,4 @@ function RoomProviderComponent({ roomId , children }: { roomId: string,children:
     }>{children}</RoomProvider>
   )
 }
-export default RoomProvider
+export default RoomProviderComponent

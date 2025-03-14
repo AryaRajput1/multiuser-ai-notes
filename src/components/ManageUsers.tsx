@@ -2,19 +2,15 @@
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
-    DialogClose,
     DialogContent,
     DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { usePathname, useRouter } from "next/navigation"
 import { useState, useTransition } from "react"
 import { db } from "../../firebase"
-import { inviteUser, removeUserFromDocument } from "@/actions"
+import { removeUserFromDocument } from "@/actions"
 import { toast } from "sonner"
 import { useUser } from "@clerk/nextjs"
 import { useRoom } from "@liveblocks/react"
@@ -34,12 +30,18 @@ function ManageUsers() {
 
 
     const handleDelete = (userId: string) => {
-        startTransition( async () => {
+        startTransition(async () => {
             if (!user) {
                 return
             }
 
             const { success } = await removeUserFromDocument(room.id, userId)
+
+            if (success) {
+                toast.success('User removed Successfully.')
+            } else {
+                toast.error('User not removed.')
+            }
         })
     }
     return (

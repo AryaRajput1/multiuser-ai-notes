@@ -5,25 +5,22 @@ import {
     DialogClose,
     DialogContent,
     DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 import { useState, useTransition } from "react"
-import { db } from "../../firebase"
 import { inviteUser } from "@/actions"
 import { toast } from "sonner"
 
 function InviteUser() {
     const [open, setIsOpen] = useState(false)
     const [email, setEmail] = useState('')
-    const [isPending, startTransition] = useTransition()
+    const transition = useTransition()
+    const startTransition = transition[1]
     const pathname = usePathname()
-    const router = useRouter()
-
 
     const onInviteUser = () => {
         const roomId = pathname.split('/').pop()

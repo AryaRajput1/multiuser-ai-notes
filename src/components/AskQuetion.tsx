@@ -5,29 +5,18 @@ import {
     DialogClose,
     DialogContent,
     DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
 import MarkDown from 'react-markdown'
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
 import * as Y from "yjs";
 import { Input } from "@/components/ui/input"
-import { usePathname, useRouter } from "next/navigation"
 import { FormEvent, useState, useTransition } from "react"
-import { db } from "../../firebase"
-import { inviteUser } from "@/actions"
 import { toast } from "sonner"
-import { BotIcon, LanguagesIcon, MessageCircleCode, MessageSquareIcon } from "lucide-react"
+import { BotIcon, MessageCircleCode } from "lucide-react"
 
-function AskQuestion({doc}: { doc: Y.Doc}) {
+function AskQuestion({ doc }: { doc: Y.Doc }) {
     const [open, setIsOpen] = useState(false)
     const [question, setQuestion] = useState('')
     const [summary, setSummary] = useState('')
@@ -40,35 +29,37 @@ function AskQuestion({doc}: { doc: Y.Doc}) {
             const document = doc.get('document-store').toJSON()
             try {
 
-            const res = await fetch(`${process.env.NEXT_PUBLIC_AI_URL}/api/chatToDocument`, {
-                method: 'POST',
-                headers: {
-                   "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    question: question,
-                    doc: document
+                const res = await fetch(`${process.env.NEXT_PUBLIC_AI_URL}/api/chatToDocument`, {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        question: question,
+                        doc: document
+                    })
                 })
-            })
 
-            const {message} = await res.json()
+                const { message } = await res.json()
 
-            if (res.ok) {
-                setSummary(message)
-                toast.success('Note Translated Successfully.')
-            } else {
-                setSummary('')
+                if (res.ok) {
+                    setSummary(message)
+                    toast.success('Note Translated Successfully.')
+                } else {
+                    setSummary('')
+                }
+            } catch (error) {
+                console.log(error)
+
+                setSummary('Something went wrong!')
             }
-        } catch(e){
-            setSummary('Not Found.')
-        }
         })
     }
     return (
         <Dialog open={open} onOpenChange={setIsOpen}>
             <Button asChild variant="outline">
                 <DialogTrigger>
-                    <MessageCircleCode/>
+                    <MessageCircleCode />
                     Chat To Document
                 </DialogTrigger>
             </Button>
@@ -78,19 +69,19 @@ function AskQuestion({doc}: { doc: Y.Doc}) {
                     <DialogDescription>
                         Ask question to chat docuemnt
                     </DialogDescription>
-                    <hr className="mt-5"/>
+                    <hr className="mt-5" />
                     {
                         question && <p className="mt-5 text-gray-500">Question: {question}</p>
                     }
 
-                </DialogHeader> 
+                </DialogHeader>
                 {
                     summary && (
                         <div className="flex flex-col items-start max-h-96 overflow-y-scroll gap-2 p-5 bg-gray-100">
                             <div className="flex">
-                                <BotIcon className="w-10 flex-shrink-0"/>
+                                <BotIcon className="w-10 flex-shrink-0" />
                                 <p className="font-bol">
-                                    GPT { isPending ? "is thinking...": "Says:"}
+                                    GPT {isPending ? "is thinking..." : "Says:"}
                                 </p>
                             </div>
                             <p>{isPending ? "Thinking..." : <MarkDown>{summary}</MarkDown>}</p>
@@ -99,11 +90,11 @@ function AskQuestion({doc}: { doc: Y.Doc}) {
                 }
                 <form onSubmit={onAskQuestion} className="flex gap-2">
                     <Input
-                    type="text"
-                    value={question}
-                    placeholder="what is this about?"
-                    className="w-full"
-                    onChange={e => setQuestion(e.target.value)}
+                        type="text"
+                        value={question}
+                        placeholder="what is this about?"
+                        className="w-full"
+                        onChange={e => setQuestion(e.target.value)}
                     />
                     <Button className="" type="submit" disabled={isPending || !question}>{isPending ? 'Asking...' : "Ask"}</Button>
                     <DialogClose asChild>

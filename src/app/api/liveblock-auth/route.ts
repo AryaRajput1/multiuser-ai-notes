@@ -1,14 +1,17 @@
 import { auth } from "@clerk/nextjs/server";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { adminDb } from "../../../../firebase-admin";
-import { Liveblocks } from "@liveblocks/node";
 import { liveblocks } from "@/lib/liveblocks";
 
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
     auth.protect()
     const { sessionClaims } = await auth()
     const { room } = await req.json()
+
+    if(!sessionClaims || !sessionClaims.email){
+        return 
+    }
 
     const session = liveblocks.prepareSession(
         sessionClaims?.email, {
@@ -17,9 +20,11 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
     const roomsDocs = await adminDb.collectionGroup('rooms').where('roomId', '==', room).get()
 
-    const isUserExists = roomsDocs.docs.find(doc => doc.userId === sessionClaims?.emaill)
+    // @ts-expect-error error
+    const isUserExists = roomsDocs.docs.find((doc) => doc.userId === sessionClaims?.emaill)
 
     if(!isUserExists){
+        // @ts-expect-error error
         return new Response({ message: 'User Doesn`t exists'}, { status: 403 });
     }
 

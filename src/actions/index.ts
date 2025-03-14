@@ -13,12 +13,12 @@ export const createNewDocument = async () => {
         title: 'New Document'
     })
 
-    await adminDb.collection('users').doc(sessionClaims?.email!).collection('rooms').doc(docRef.id).set({
+    await adminDb.collection('users').doc(sessionClaims?.email || "").collection('rooms').doc(docRef.id).set({
         userId: sessionClaims?.email,
         createdAt: new Date(),
-        role: 'owner', 
+        role: 'owner',
         roomId: docRef.id
-    }) 
+    })
 
 
     return {
@@ -47,7 +47,7 @@ export const deleteDocument = async (roomId: string) => {
             success: true
         }
 
-    } catch(e) {
+    } catch (e) {
         console.log(e)
         return {
             success: false
@@ -70,8 +70,9 @@ export const inviteUser = async (roomId: string, email: string) => {
             success: true
         }
 
-    } catch(e) {
-        console.log(e)
+    } catch (error) {
+        console.log(error)
+
         return {
             success: false
         }
@@ -85,9 +86,9 @@ export const removeUserFromDocument = async (roomId: string, userId: string) => 
         await adminDb.collection('users').doc(userId).collection('rooms').doc(roomId).delete()
 
         return { success: true }
-        
     } catch (error) {
+        console.log(error)
+        
         return { success: false }
     }
-
 }

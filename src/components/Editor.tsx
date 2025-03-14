@@ -4,7 +4,7 @@ import { BlockNoteEditor } from "@blocknote/core";
 import { useCreateBlockNote } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/shadcn";
 import * as Y from "yjs";
-import { getYjsProviderForRoom } from "@liveblocks/yjs";
+import { getYjsProviderForRoom, LiveblocksYjsProvider } from "@liveblocks/yjs";
 import { useRoom, useSelf } from "@liveblocks/react/suspense";
 import { useState } from "react";
 import { Button } from "./ui/button";
@@ -43,8 +43,8 @@ export function Editor() {
   
 type EditorProps = {
     doc: Y.Doc;
-    provider: any;
-    darkMode: Boolean
+    provider: LiveblocksYjsProvider;
+    darkMode: boolean
   };
   
   function BlockNote({ doc, provider, darkMode }: EditorProps) {
