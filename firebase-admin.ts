@@ -1,11 +1,16 @@
 import { App, cert, getApp, getApps, initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore"
 
-var serviceKey = require("./service_key.json");
+const serviceKeyBase64 = process.env.FIREBASE_SERVICE_KEY;
+if (!serviceKeyBase64) {
+    throw new Error("Missing Firebase service key");
+}
 
-let app:App;
+const serviceKey = JSON.parse(Buffer.from(serviceKeyBase64, "base64").toString("utf8"));
 
-if( getApps().length === 0 ) {
+let app: App;
+
+if (getApps().length === 0) {
     app = initializeApp({
         credential: cert(serviceKey)
     });
